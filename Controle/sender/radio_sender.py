@@ -6,7 +6,7 @@ BWD = 1
 tx_port = "/tmp/ttyV0"
 
 class RadioSender():
-    def __init__(self, robot_id=3, port="/dev/ttyACM0", baudrate=115200):
+    def __init__(self, robot_id=3, port="/dev/ttyACM1", baudrate=115200):
         self.robot_id = robot_id
         self.packet_size = 10
         self.serial = serial.Serial(port, baudrate, timeout=1)
@@ -74,6 +74,8 @@ class RadioSender():
             cmd[idx_dir] = direction
         return tuple(cmd)
     
+    def stop_all_motors(self):
+        self.send_command(0,0,0,0,0,0,0,0,False)
 
 if __name__ == "__main__":
     sender = RadioSender()
@@ -88,14 +90,20 @@ if __name__ == "__main__":
 
     # Comando para todos os motores juntos
     all_motors = [250, 0, 250, 0, 250, 0, 250, 0, False]
+    backwards = [250, BWD, 250, BWD, 250, BWD, 250, BWD, False]
+    frontwards = [250, FWD, 250, FWD, 250, FWD, 250, FWD]
+    r_rotation = [250, BWD, 250, FWD, 250, BWD, 250, FWD, False] 
+    l_rotation = [250, FWD, 250, BWD, 250, FWD, 250, BWD, False]
 
     # Intervalo entre comandos (em segundos)
     delay = 2.0
 
     print("Iniciando teste contínuo dos motores... (Ctrl+C para parar)")
-
-    while True:
-
-        cmd = sender.motor_test([1,2,3,4], direction=BWD)
-        sender.send_command(*cmd)
-    
+    try:
+        while True:
+            sender.send_command(*r_rotation)
+    except KeyboardInterrupt:
+        print("\nTeste interrompido pelo usuário.")
+    except Exception as e:
+        print(f"\nOcorreu um erro durante o teste: {e}")
+        

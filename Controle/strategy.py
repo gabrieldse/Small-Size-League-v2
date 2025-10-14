@@ -16,8 +16,8 @@ class Strategy:
             return None
 
         # O alvo de posição é a bola
-        robot_target_x = ball_pos['x']
-        robot_target_y = ball_pos['y']
+        robot_target_x = ball_pos.x
+        robot_target_y = ball_pos.y
 
         # O alvo de orientação é o ângulo direto para a bola
         target_orientation = math.atan2(

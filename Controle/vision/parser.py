@@ -18,16 +18,17 @@ class VisionDataParser:
     def parser_loop(self, data):
         self.data = data
         try:
-            frame = wr.SSL_WrapperPacket().FromString(self.data)
+            frame = wr.SSL_WrapperPacket()
+            frame.ParseFromString(self.data)
 
-            if frame.detection:
-                detection = MessageToDict(frame.detection, preserving_proto_field_name=True)
-                self.logger.debug(f"Detection frame number: {detection.get('frame_number')}")
+            if frame.HasField('detection'):
+                detection = frame.detection
+                self.logger.debug(f"Detection frame number: {detection.frame_number}")
                 with self._lock:
                     self.last_detection_data = detection
 
-            if frame.geometry:
-                geometry = MessageToDict(frame.geometry, preserving_proto_field_name=True)
+            if frame.HasField('geometry'):
+                geometry = frame.geometry
                 self.logger.debug("Geometry data received.")
                 with self._lock:
                     self.last_geometry_data = geometry
@@ -41,9 +42,11 @@ class VisionDataParser:
         with self._lock:
             if not self.last_detection_data:
                 return None
-            if self.last_detection_data.get('frame_number') < self.last_frame_number:
-                return None
-            self.last_frame_number = self.last_detection_data.get('frame_number', -1)
+            #if self.last_detection_data.get('frame_number') < self.last_frame_number:
+            #    return None
+            
+            self.last_frame_number = self.last_detection_data
+            
             return self.last_detection_data
     
     def get_last_geometry(self):

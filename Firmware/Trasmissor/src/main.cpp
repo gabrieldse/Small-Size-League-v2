@@ -48,8 +48,8 @@ void setup() {
 
     radio.stopListening();
 
-    Serial.println("Radio pronto para transmitir pacotes.");
-    //radio.printDetails();
+    //Serial.println("Radio pronto para transmitir pacotes.");
+    //adio.printDetails();
 }
 
 void loop() {

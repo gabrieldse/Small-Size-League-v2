@@ -7,6 +7,7 @@ BWD = 1
 
 class UdpSender(RobotSender):
     def __init__(self, robot_ip, robot_port):
+        super().__init__()
         self.robot_ip = robot_ip
         self.robot_port = robot_port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

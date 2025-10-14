@@ -21,7 +21,7 @@ class GCDataParser:
             frame.ParseFromString(self.data)
 
             with self._lock:
-                self.last_data = MessageToDict(frame, preserving_proto_field_name=True)
+                self.last_data = frame
 
         except DecodeError:
             self.logger.error("Failed to decode the received data.")
