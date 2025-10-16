@@ -18,14 +18,14 @@ import sys
 from typing import Tuple
 
 # Ajuste de import se necessário (assume que PYTHONPATH já aponta para vision/protobuf_messages)
-from vision.protobuf_messages import ssl_gc_referee_message_pb2 as gc
-from vision.protobuf_messages import wrapper_pb2 as wr
+from Controle.vision.protobuf_messages import ssl_gc_referee_message_pb2 as gc
+from Controle.vision.protobuf_messages import wrapper_pb2 as wr
 
 # ====== CONFIG ======
 GC_ADDR = ("224.5.23.1", 10003)
 VISION_ADDR = ("224.5.23.2", 10006)
 SLEEP_TIME = 0.25  # segundos entre frames
-STATE_CYCLE = ["HALT", "STOP", "FORCE_START", "NORMAL_START"]
+STATE_CYCLE = ["NORMAL_START"]
 # ====================
 
 def detect_local_ip() -> str:
@@ -129,8 +129,8 @@ def build_vision_packet(frame_number: int) -> wr.SSL_WrapperPacket:
     for i in range(2):
         rb = detection.robots_yellow.add()
         rb.robot_id = 3
-        rb.x = -1000.0 * i
-        rb.y = -200.0 * i
+        rb.x = 1000.0 * i
+        rb.y = 1000.0 * i
         rb.orientation = -0.1 * i
         rb.confidence = 1.0
         rb.pixel_x = 400 + i * 50
@@ -171,7 +171,7 @@ def main():
             print(f"[VISION] Frame {frame}: 3 blue, 2 yellow, 1 ball")
 
             frame += 1
-            time.sleep(1)
+            time.sleep(0.1)
 
     except KeyboardInterrupt:
         print("\n[INFO] Simulator stopped by user")

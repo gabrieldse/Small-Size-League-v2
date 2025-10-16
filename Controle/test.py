@@ -6,7 +6,7 @@ from sender.radio_sender import RadioSender   # Importa sua classe
 
 # --- CONFIGURAÇÕES DO TESTE ---
 # Vamos simular que a bola está 1 metro (1000mm) à frente do robô
-POSICAO_BOLA_FALSA = {'x': -1000, 'y':-1000}
+POSICAO_BOLA_FALSA = {'x': 0, 'y':-110}
 
 # ID do robô e porta do rádio
 ROBOT_ID_TESTE = 3
@@ -50,12 +50,12 @@ def main():
             sender.send_command(
                 wheel_speeds['fl_speed'], wheel_speeds['fl_direction'],
                 wheel_speeds['fr_speed'], wheel_speeds['fr_direction'],
-                wheel_speeds['br_speed'], wheel_speeds['br_direction'], # M3 -> BR
-                wheel_speeds['bl_speed'], wheel_speeds['bl_direction'], # M4 -> BL
+                wheel_speeds['bl_speed'], wheel_speeds['bl_direction'], # M3 -> BR
+                wheel_speeds['br_speed'], wheel_speeds['br_direction'], # M4 -> BL
                 False # Kicker
             )
             
-            time.sleep(0.05) # Loop rápido
+            time.sleep(0.01) # Loop rápido
 
     except KeyboardInterrupt:
         print("\nTeste interrompido.")
