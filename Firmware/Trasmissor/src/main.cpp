@@ -49,7 +49,7 @@ void setup() {
     radio.stopListening();
 
     //Serial.println("Radio pronto para transmitir pacotes.");
-    //adio.printDetails();
+    radio.printDetails();
 }
 
 void loop() {

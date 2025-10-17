@@ -55,6 +55,7 @@ void setup() {
     Serial.println("Robot pronto e aguardando comandos...");
     Serial.print("I am ");
     Serial.println(robot.getId());
+    radio.printDetails();
 }
 
 void loop() {

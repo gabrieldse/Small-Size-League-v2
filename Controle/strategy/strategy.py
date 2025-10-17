@@ -1,8 +1,11 @@
 # strategy.py
 import math
+
+from cv2 import normalize
 from Controle.constants import *
 import time
 from utils.logger import setup_logger
+from strategy.vectors import sum_vectors, norm_vector, multi_vector
 
 class Strategy:
     def __init__(self):
@@ -47,7 +50,7 @@ class Strategy:
         }
 
         if context:
-            wheel_speeds = omni_calc.calculate_wheel_speeds(context)
+            wheel_speeds = omni_calc.go_direction(context)
         else:
             wheel_speeds = {k: 0 for k in [
                 'fl_speed', 'bl_speed', 'fr_speed', 'br_speed',
@@ -108,7 +111,7 @@ class Strategy:
         }, robot_id)
 
         if target_data:
-            wheel_speeds = components['omni_calculator'].calculate_wheel_speeds(target_data)
+            wheel_speeds = components['omni_calculator'].go_direction(target_data)
             should_kick = target_data.get('kick_command', False)
         else:
             wheel_speeds = {'fl_speed': 0, 'bl_speed': 0, 'fr_speed': 0, 'br_speed': 0,
@@ -161,39 +164,53 @@ class Strategy:
             )
 
     def enforce_game_rules(self, robot_info, ball_info, components, game_state):
-        game_state = -1
+        #game_state = KICKOF_YELLOW
+
+        target = {'x': -1000.0, 'y': 0}
+        CENTER = {'x': 0, 'y':0 }
+        KICK_YELLOW = {'x': 200, 'y':0 }
+        KICK_BLUE = {'x': 1100, 'y':0 }
+        GOAL = {'x': -1700, 'y':0 }
+        PENAL_BLUE = {'x': -750, 'y':0}
+        PENAL_YELLOW = {'x': 750, 'y':0}
 
         if game_state == -1:
             print("testando funçoes")
-            target = {'x': 3000.0, 'y': 0.0}  # unidades em mm, por exemplo
-            self.move_to_target(robot_info, target, components)
+            target = {'x': -1000.0, 'y': 0}  # unidades em mm, por exemplo
+            self.move_to_target(robot_info, KICK_BLUE, components)
+
         if game_state == HALT:
             print(f"halt, Parando robos state: {game_state}")
             self.stop_all_robots(components['robot_senders']) 
 
         if game_state == STOP:
             print(f"Stop: {game_state}")
-            self.stop_all_robots(components['robot_senders'])
+            self.stop_all_robots(components['robot_senders']) 
 
         if game_state == NORMAL_START:
-            print('seguindo a bola')
+            print('saida normal')
             self.follow_ball(robot_info, ball_info, components)
 
         if game_state == FORCE_START:
-            print('Force start:')
+            print("ataque")
             self.follow_ball(robot_info, ball_info, components)
 
         if game_state == KICKOF_YELLOW:
             print("mantenha a distancia")
-            self.keep_distance(robot_info, ball_info, components)
+            self.move_to_target(robot_info, KICK_YELLOW, components)
+            #self.keep_distance(robot_info, ball_info, components)
 
         if game_state == KICKOF_BLUE:
-            self.keep_distance(robot_info, ball_info, components)
+            self.move_to_target(robot_info, KICK_BLUE, components)
+            #self.keep_distance(robot_info, ball_info, components)
             
         if game_state == PENALTY_YELLOW:
-            self.penalty(robot_info, ball_info, components)
+            self.move_to_target(robot_info, PENAL_BLUE, components)            
         if game_state == PENALTY_BLUE:
-            pass
+            self.move_to_target(robot_info, PENAL_YELLOW, components)            
+
+        else:
+            print("caso não listado")
 
     def get_speed_scale(self, gc_parser):
         """
@@ -227,14 +244,13 @@ class Strategy:
         
         detection = vision_parser.get_last_detection()
         if detection:
-            our_robots = detection.robots_blue if TEAM_COLOR == "blue" else detection.robots_yellow
+            our_robots = detection.robots_blue #if TEAM_COLOR == "blue" else detection.robots_yellow
             opponent_robots = detection.robots_yellow if TEAM_COLOR == "blue" else detection.robots_blue
             balls = detection.balls
             print(our_robots)
             gc_data = gc_parser.get_last_data()
             # print("data")
             #print(gc_data)
-            game_state = 3
 
             if gc_data is not None:
                 # O comando atual indica o "game state"
@@ -251,10 +267,13 @@ class Strategy:
                 print("No ball detected. Stopping robots.")
                 # stop_all_robots(components['robot_senders'])
                 time.sleep(0.05)
+            try:
+                ball_info = balls[0]
+                print(f"Ball detected at x={ball_info.x:.1f}, y={ball_info.y:.1f}")                   
+                #print(f"Detected {len(our_robots)} of our robots.")
+            except Exception as e:
+                print(f"\nOcorreu um erro durante o teste: {e}")
 
-            ball_info = balls[0]
-            print(f"Ball detected at x={ball_info.x:.1f}, y={ball_info.y:.1f}")                   
-            print(f"Detected {len(our_robots)} of our robots.")
 
             ## LOGICS PARA OS ROBOS
             for robot_info in our_robots:
@@ -263,7 +282,7 @@ class Strategy:
 
                 print(f"Robot {robot_id}: x={x:.1f}, y={y:.1f}, θ={orientation:.2f}")
                 try:
-                    game_state = 2
+                    #game_state = 2
                     strategys.enforce_game_rules(robot_info, ball_info, components, game_state)
 
                 except Exception as e:
@@ -279,6 +298,27 @@ class Strategy:
             print("No vision data received. Stopping all robots.")
             strategys.stop_all_robots(components['robot_senders'])
 
+    def defender(self, robot_info, ball_info, components):
+        print("funcão defender")
+        if ball_info.y >= GOAL_A['x']:
+            self.move_to_target(robot_info, GOAL_A, components)
+
+        elif ball_info.y <= GOAL_B['x']:
+            self.move_to_target(robot_info, GOAL_B, components)
+        
+        elif ball_info.y > GOAL_A['x'] and ball_info.y < GOAL_A['x']:
+            self.move_to_target(robot_info, ball_info.y, components)
+
+    def attack(self, robot_info, ball_info, components):
+        print("Função de ataque")
+        distancia = {'x': (robot_info.x + ball_info.x),'y': (robot_info.y+ ball_info.y)}
+        direcao = norm_vector(distancia)
+        distancia_normal = multi_vector(direcao, 200)
+        target = {'x': (robot_info.x + distancia_normal),'y': (robot_info.y+ ball_info.y)}
+        target = sum_vectors(ball_info, distancia_normal)
+
+        self.move_to_target(robot_info, target, components)
+ 
     def move_fwd(self, robot_senders):
         for sender in robot_senders.values():
             sender.send_command(250, 0, 250, 0, 250, 0, 250, 0, 0)

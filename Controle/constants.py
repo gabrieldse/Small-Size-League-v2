@@ -25,3 +25,12 @@ KICKOF_YELLOW = 4
 KICKOF_BLUE = 5
 PENALTY_YELLOW = 6
 PENALTY_BLUE = 7
+
+CENTER = {'x': 0, 'y':0 }
+KICK_YELLOW = {'x': 1000, 'y':111 }
+KICK_BLUE = {'x': 1100, 'y':0 }
+GOAL = {'x': -1700, 'y':0 }
+GOAL_A = {'x': 2000, 'y': 400}
+GOAL_B = {'x': 2000, 'y': -400}
+
+PENALTY_BLUE = {'x': -750, 'y':0}

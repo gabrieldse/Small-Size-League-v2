@@ -7,7 +7,7 @@ but do not change the variable names or the structure of the file.
 """
 
 "CONFIGURAÇÕES GERAIS"
-COR_DO_TIME = 0              # 0 -> Amarelo; 1 -> Azul
+COR_DO_TIME = 1              # 0 -> Amarelo; 1 -> Azul
 LADO_DO_TIME = 1             # 0 -> Esquerdo; 1 -> Direito
 
 "CONFIGURAÇÕES ESPECÍFICAS" 
