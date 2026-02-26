@@ -2,33 +2,34 @@
 #define Robot_h
 
 #include <Arduino.h>
-#include <motor.h>
 #include <config.h>
+#include <motor.h>
 
 class Robot {
 public:
-    explicit Robot(RobotID id);
+  explicit Robot(RobotID id);
 
-    void initializeRobot();
+  void initializeRobot();
 
-    void setMotorFL(int speed, int direction);
-    void setMotorBL(int speed, int direction);
-    void setMotorFR(int speed, int direction);
-    void setMotorBR(int speed, int direction);
+  void setMotorFL(int speed, int direction);
+  void setMotorBL(int speed, int direction);
+  void setMotorFR(int speed, int direction);
+  void setMotorBR(int speed, int direction);
 
-    void kick();
-    void stopAllMotors();
+  void kick();
+  void stopAllMotors();
 
-    int getId();
+  int getId();
+
 private:
-    explicit Robot(const RobotConfig& config);
-    Motor motorFL;
-    Motor motorBL;
-    Motor motorFR;
-    Motor motorBR;
-    
-    int id;
-    uint8_t _kickerPin;
+  explicit Robot(const RobotConfig &config);
+  Motor motorFL;
+  Motor motorBL;
+  Motor motorFR;
+  Motor motorBR;
+
+  int id;
+  uint8_t _kickerPin;
 };
 
 #endif

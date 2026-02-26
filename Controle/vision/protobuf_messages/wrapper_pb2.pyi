@@ -13,4 +13,12 @@ class SSL_WrapperPacket(_message.Message):
     GEOMETRY_FIELD_NUMBER: _ClassVar[int]
     detection: _messages_robocup_ssl_detection_pb2.SSL_DetectionFrame
     geometry: _messages_robocup_ssl_geometry_pb2.SSL_GeometryData
-    def __init__(self, detection: _Optional[_Union[_messages_robocup_ssl_detection_pb2.SSL_DetectionFrame, _Mapping]] = ..., geometry: _Optional[_Union[_messages_robocup_ssl_geometry_pb2.SSL_GeometryData, _Mapping]] = ...) -> None: ...
+    def __init__(
+        self,
+        detection: _Optional[
+            _Union[_messages_robocup_ssl_detection_pb2.SSL_DetectionFrame, _Mapping]
+        ] = ...,
+        geometry: _Optional[
+            _Union[_messages_robocup_ssl_geometry_pb2.SSL_GeometryData, _Mapping]
+        ] = ...,
+    ) -> None: ...

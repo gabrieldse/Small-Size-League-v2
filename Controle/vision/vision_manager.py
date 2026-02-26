@@ -3,13 +3,14 @@ import time
 from utils.logger import setup_logger
 from vision.protobuf_messages import wrapper_pb2 as wr
 from google.protobuf.message import DecodeError
-from google.protobuf.json_format import MessageToDict
 from vision.clientUDP import UDPClient  # ajuste o path se necessário
+
 
 class VisionManager:
     """
     Handles SSL-Vision data acquisition, parsing, and access to current state.
     """
+
     def __init__(self, team_color="blue", ip="224.5.23.2", port=10006):
         self.logger = setup_logger("vision_manager", "logs/vision_manager.log")
 

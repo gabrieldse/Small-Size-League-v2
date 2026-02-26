@@ -3,14 +3,14 @@
 
 class RadioCommunication {
 public:
-    RadioCommunication(RF24& radio, const byte* address);
+  RadioCommunication(RF24 &radio, const byte *address);
 
-    void beginTX();
-    void beginRX();
+  void beginTX();
+  void beginRX();
 
-    bool receivePacket(void* buffer, size_t bufferSize);
+  bool receivePacket(void *buffer, size_t bufferSize);
 
 private:
-    RF24& _radio;         
-    const byte* _address;
+  RF24 &_radio;
+  const byte *_address;
 };

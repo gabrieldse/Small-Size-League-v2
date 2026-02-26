@@ -7,10 +7,10 @@ but do not change the variable names or the structure of the file.
 """
 
 "CONFIGURAÇÕES GERAIS"
-COR_DO_TIME = 1              # 0 -> Amarelo; 1 -> Azul
-LADO_DO_TIME = 1             # 0 -> Esquerdo; 1 -> Direito
+COR_DO_TIME = 1  # 0 -> Amarelo; 1 -> Azul
+LADO_DO_TIME = 1  # 0 -> Esquerdo; 1 -> Direito
 
-"CONFIGURAÇÕES ESPECÍFICAS" 
+"CONFIGURAÇÕES ESPECÍFICAS"
 IP_ALVIN = "10.74.1.122"
 IP_SIMON = "192.168.0.100"
 IP_THEODORE = "10.74.1.124"
@@ -19,13 +19,13 @@ ID_ALVIN = 6
 ID_SIMON = 3
 ID_THEODORE = 7
 
-FUNCAO_ALVIN = 0             #0 -> Goleiro; 1 -> Meio-Campista; 2 -> Atacante
-FUNCAO_SIMON = 2            #0 -> Goleiro; 1 -> Meio-Campista; 2 -> Atacante
-FUNCAO_THEODORE = 2                             #0 -> Goleiro; 1 -> Meio-Campista; 2 -> Atacante
+FUNCAO_ALVIN = 0  # 0 -> Goleiro; 1 -> Meio-Campista; 2 -> Atacante
+FUNCAO_SIMON = 2  # 0 -> Goleiro; 1 -> Meio-Campista; 2 -> Atacante
+FUNCAO_THEODORE = 2  # 0 -> Goleiro; 1 -> Meio-Campista; 2 -> Atacante
 
 PORT = 8080
 
-VISION_DATA_SOURCE_IP = '224.5.23.2'
+VISION_DATA_SOURCE_IP = "224.5.23.2"
 VISION_DATA_SOURCE_PORT = 10006
 
 WHEEL_RADIUS_MM = 30

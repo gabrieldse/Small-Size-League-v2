@@ -1,23 +1,23 @@
-import time
 import serial
 
 FWD = 0
 BWD = 1
 tx_port = "/tmp/ttyV0"
 
-class RadioSender():
+
+class RadioSender:
     def __init__(self, robot_id=3, port="/dev/ttyACM2", baudrate=115200):
         self.robot_id = robot_id
         self.packet_size = 10
         self.serial = serial.Serial(port, baudrate, timeout=1)
 
     def build_packet(self, m1, m1_dir, m2, m2_dir, m3, m3_dir, m4, m4_dir, kicker):
-        
+
         # Headers
         packet = bytearray([0xAA, 0x55])
         tail = 0xFF
         packet.append(self.robot_id)
-        
+
         # Validate motor speeds and directions
         m1 = max(0, min(255, int(m1)))
         m1_dir = 1 if m1_dir else 0
@@ -32,7 +32,7 @@ class RadioSender():
         data = [m1, m1_dir, m2, m2_dir, m3, m3_dir, m4, m4_dir, kicker]
         for value in data:
             packet.append(value)
-    
+
         # Calculate checksum
         checksum = sum(data) % 256
         packet.append(checksum)
@@ -40,7 +40,9 @@ class RadioSender():
         return packet
 
     def send_command(self, m1, m1_dir, m2, m2_dir, m3, m3_dir, m4, m4_dir, kicker):
-        packet = self.build_packet(m1, m1_dir, m2, m2_dir, m3, m3_dir, m4, m4_dir, kicker)
+        packet = self.build_packet(
+            m1, m1_dir, m2, m2_dir, m3, m3_dir, m4, m4_dir, kicker
+        )
         print(list(packet))
         self.send_packet(packet)
 
@@ -51,18 +53,22 @@ class RadioSender():
     def motor_test(self, motors, direction=FWD, speed=250, kicker=False):
         """
         Returns a command tuple for a single motor or multiple motors.
-        
+
         motor: str ("fl", "fr", "bl", "br") ou int (1=fl,2=fr,3=bl,4=br)
         direction: 0=forward, 1=backward
         speed: motor speed 0-255
         kicker: True/False
         """
-        cmd = [0,0,0,0,0,0,0,0,kicker]
+        cmd = [0, 0, 0, 0, 0, 0, 0, 0, kicker]
         motor_map = {
-            "fl": (0,1), 1: (0,1),
-            "fr": (2,3), 3: (2,3),
-            "bl": (4,5), 2: (4,5),
-            "br": (6,7), 4: (6,7)
+            "fl": (0, 1),
+            1: (0, 1),
+            "fr": (2, 3),
+            3: (2, 3),
+            "bl": (4, 5),
+            2: (4, 5),
+            "br": (6, 7),
+            4: (6, 7),
         }
         if not isinstance(motors, list):
             motors = [motors]
@@ -73,9 +79,10 @@ class RadioSender():
             cmd[idx_speed] = speed
             cmd[idx_dir] = direction
         return tuple(cmd)
-    
+
     def stop_all_motors(self):
-        self.send_command(0,0,0,0,0,0,0,0,False)
+        self.send_command(0, 0, 0, 0, 0, 0, 0, 0, False)
+
 
 if __name__ == "__main__":
     sender = RadioSender()
@@ -91,8 +98,8 @@ if __name__ == "__main__":
     # Comando para todos os motores juntos
     all_motors = [250, FWD, 250, FWD, 250, FWD, 250, FWD, False]
     backwards = [250, BWD, 250, BWD, 250, BWD, 250, BWD, False]
-    frontwards = [250, FWD, 250, FWD, 250, FWD, 250, FWD,False]
-    r_rotation = [250, BWD, 250, FWD, 250, BWD, 250, FWD, True] 
+    frontwards = [250, FWD, 250, FWD, 250, FWD, 250, FWD, False]
+    r_rotation = [250, BWD, 250, FWD, 250, BWD, 250, FWD, True]
     l_rotation = [250, FWD, 250, BWD, 250, FWD, 250, BWD, True]
     chutar = [0, 0, 0, 0, 0, 0, 0, 0, True]
     # Intervalo entre comandos (em segundos)
@@ -107,4 +114,3 @@ if __name__ == "__main__":
         print("\nTeste interrompido pelo usuário.")
     except Exception as e:
         print(f"\nOcorreu um erro durante o teste: {e}")
-        

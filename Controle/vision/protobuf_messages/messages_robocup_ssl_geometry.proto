@@ -24,8 +24,8 @@ message SSL_FieldLineSegment {
   optional SSL_FieldShapeType type = 5;
 }
 
-// Represents a field marking as a circular arc segment represented by center point, a
-// start angle, an end angle, and an arc thickness.
+// Represents a field marking as a circular arc segment represented by center
+// point, a start angle, an end angle, and an arc thickness.
 message SSL_FieldCircularArc {
   // Name of this field marking.
   required string name = 1;
@@ -52,9 +52,10 @@ message SSL_GeometryFieldSize {
   required int32 goal_width = 3;
   // Goal depth (distance from outer goal line edge to inner goal back) in mm
   required int32 goal_depth = 4;
-  // Boundary width (distance from touch/goal line centers to boundary walls) in mm
+  // Boundary width (distance from touch/goal line centers to boundary walls) in
+  // mm
   required int32 boundary_width = 5;
-  // Generated line segments based on the other parameters 
+  // Generated line segments based on the other parameters
   repeated SSL_FieldLineSegment field_lines = 6;
   // Generated circular arcs based on the other parameters
   repeated SSL_FieldCircularArc field_arcs = 7;
@@ -66,18 +67,20 @@ message SSL_GeometryFieldSize {
   optional int32 center_circle_radius = 10;
   // Thickness/width of the lines on the field in mm
   optional int32 line_thickness = 11;
-  // Distance between the goal center and the center of the penalty mark in mm 
+  // Distance between the goal center and the center of the penalty mark in mm
   optional int32 goal_center_to_penalty_mark = 12;
   // Goal height in mm
   optional int32 goal_height = 13;
-  // Ball radius in mm (note that this is a float type to represent sub-mm precision)
+  // Ball radius in mm (note that this is a float type to represent sub-mm
+  // precision)
   optional float ball_radius = 14;
-  // Max allowed robot radius in mm (note that this is a float type to represent sub-mm precision)
+  // Max allowed robot radius in mm (note that this is a float type to represent
+  // sub-mm precision)
   optional float max_robot_radius = 15;
 }
 
 message SSL_GeometryCameraCalibration {
-  required uint32 camera_id     = 1;
+  required uint32 camera_id = 1;
   required float focal_length = 2;
   required float principal_point_x = 3;
   required float principal_point_y = 4;
@@ -100,7 +103,8 @@ message SSL_GeometryCameraCalibration {
 // There are two phases with different accelerations during the ball kicks:
 // 1. Sliding
 // 2. Rolling
-// The full model is described in the TDP of ER-Force from 2016, which can be found here:
+// The full model is described in the TDP of ER-Force from 2016, which can be
+// found here:
 // https://ssl.robocup.org/wp-content/uploads/2019/01/2016_ETDP_ER-Force.pdf
 message SSL_BallModelStraightTwoPhase {
   // Ball sliding acceleration [m/s^2] (should be negative)

@@ -1,13 +1,13 @@
 from vision.protobuf_messages import wrapper_pb2 as wr
-from google.protobuf.json_format import MessageToDict
 from google.protobuf.message import DecodeError
 from utils.logger import setup_logger
 import threading
 
+
 class VisionDataParser:
     def __init__(self):
         self.data = None
-        self.logger = setup_logger('vision_parser', 'logs/parser.log')
+        self.logger = setup_logger("vision_parser", "logs/parser.log")
 
         self.last_detection_data = None
         self.last_geometry_data = None
@@ -21,13 +21,13 @@ class VisionDataParser:
             frame = wr.SSL_WrapperPacket()
             frame.ParseFromString(self.data)
 
-            if frame.HasField('detection'):
+            if frame.HasField("detection"):
                 detection = frame.detection
                 self.logger.debug(f"Detection frame number: {detection.frame_number}")
                 with self._lock:
                     self.last_detection_data = detection
 
-            if frame.HasField('geometry'):
+            if frame.HasField("geometry"):
                 geometry = frame.geometry
                 self.logger.debug("Geometry data received.")
                 with self._lock:
@@ -42,13 +42,13 @@ class VisionDataParser:
         with self._lock:
             if not self.last_detection_data:
                 return None
-            #if self.last_detection_data.get('frame_number') < self.last_frame_number:
+            # if self.last_detection_data.get('frame_number') < self.last_frame_number:
             #    return None
-            
+
             self.last_frame_number = self.last_detection_data
-            
+
             return self.last_detection_data
-    
+
     def get_last_geometry(self):
         with self._lock:
             if not self.last_geometry_data:

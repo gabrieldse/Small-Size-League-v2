@@ -1,9 +1,9 @@
 #include <Arduino.h>
-#include <robot.h>
 #include <communication.h>
-#include <network_protocol.h>
-#include <robot_controller.h>
 #include <config.h>
+#include <network_protocol.h>
+#include <robot.h>
+#include <robot_controller.h>
 
 // --- Configuration Section ---
 const RobotID CURRENT_ROBOT = SIMON; // Change to ALVIN, SIMON, or THEODORE
@@ -15,25 +15,26 @@ Communication messenger(LARSIS_ROBOS_CONFIG);
 unsigned long lastPacketTime = 0;
 
 void setup() {
-    Serial.begin(19200);
-    robot.initializeRobot();
-    messenger.begin();
-    Serial.println("Robot ready and waiting for commands...");
+  Serial.begin(19200);
+  robot.initializeRobot();
+  messenger.begin();
+  Serial.println("Robot ready and waiting for commands...");
 }
 
 /**
  * Main loop function
- * 
+ *
  * - Continuously checks for incoming message packets.
- * - If a packet is received, updates the timestamp and dispatches the packet to the robot controller.
- * - If no packet is received for more than 500 milliseconds, stops all robot motors as a safety measure.
+ * - If a packet is received, updates the timestamp and dispatches the packet to
+ * the robot controller.
+ * - If no packet is received for more than 500 milliseconds, stops all robot
+ * motors as a safety measure.
  */
 
- 
 void loop() {
-    MessagePacket packet;
-    if (messenger.receivePacket(packet)) {
-        Serial.println("Comando Front Left:");
+  MessagePacket packet;
+  if (messenger.receivePacket(packet)) {
+    Serial.println("Comando Front Left:");
     Serial.print("  SetPoint: ");
     Serial.println(packet.frontLeft.setPoint);
     Serial.print("  Direction: ");
@@ -60,10 +61,10 @@ void loop() {
     // Imprimir o comando do kicker
     Serial.print("Comando Kicker: ");
     Serial.println(packet.kickerCommand);
-        lastPacketTime = millis();
-        handlePacket(robot, packet);
-    }
-    if (millis() - lastPacketTime > 500) {
-        robot.stopAllMotors();
-    }
+    lastPacketTime = millis();
+    handlePacket(robot, packet);
+  }
+  if (millis() - lastPacketTime > 500) {
+    robot.stopAllMotors();
+  }
 }

@@ -1,13 +1,13 @@
 from vision.protobuf_messages import ssl_gc_referee_message_pb2 as gc
-from google.protobuf.json_format import MessageToDict
 from google.protobuf.message import DecodeError
 from utils.logger import setup_logger
 import threading
 
+
 class GCDataParser:
     def __init__(self):
         self.data = None
-        self.logger = setup_logger('gc_parser', 'logs/parser.log')
+        self.logger = setup_logger("gc_parser", "logs/parser.log")
 
         self.last_data = None
         self.last_frame_number = -1

@@ -28,6 +28,7 @@ SLEEP_TIME = 0.25  # segundos entre frames
 STATE_CYCLE = ["NORMAL_START"]
 # ====================
 
+
 def detect_local_ip() -> str:
     """
     Detecta o IP local que seria usado para acessar a internet.
@@ -44,21 +45,26 @@ def detect_local_ip() -> str:
         s.close()
     return ip
 
-def make_multicast_sock(bind_addr: Tuple[str,int]=None, ttl: int=1) -> socket.socket:
+
+def make_multicast_sock(
+    bind_addr: Tuple[str, int] = None, ttl: int = 1
+) -> socket.socket:
     """Cria socket UDP para multicast (envio)."""
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, socket.IPPROTO_UDP)
     # permitir reuso de porta (opcional)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     # set TTL
-    sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, struct.pack('b', ttl))
+    sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_TTL, struct.pack("b", ttl))
     # on some systems, also set IP_MULTICAST_LOOP if you want local loopback
     return sock
 
-def safe_send(sock: socket.socket, data: bytes, addr: Tuple[str,int]):
+
+def safe_send(sock: socket.socket, data: bytes, addr: Tuple[str, int]):
     try:
         sock.sendto(data, addr)
     except Exception as e:
         print(f"[ERR] sendto {addr}: {e}", file=sys.stderr)
+
 
 def build_gc_message(frame_number: int, state: str) -> gc.Referee:
     msg = gc.Referee()
@@ -95,6 +101,7 @@ def build_gc_message(frame_number: int, state: str) -> gc.Referee:
     yellow.timeout_time = 0
 
     return msg
+
 
 def build_vision_packet(frame_number: int) -> wr.SSL_WrapperPacket:
     packet = wr.SSL_WrapperPacket()
@@ -138,10 +145,14 @@ def build_vision_packet(frame_number: int) -> wr.SSL_WrapperPacket:
 
     return packet
 
+
 def main():
     iface_ip = detect_local_ip()
     if iface_ip == "127.0.0.1":
-        print("[WARN] Detected loopback IP (127.0.0.1). If your controller expects multicast on a real interface, set INTERFACE_IP manually.")
+        print(
+            "[WARN] Detected loopback IP (127.0.0.1). If your controller "
+            "expects multicast on a real interface, set INTERFACE_IP manually."
+        )
     print(f"[INFO] Using local interface IP: {iface_ip}")
 
     gc_sock = make_multicast_sock()
@@ -149,14 +160,23 @@ def main():
 
     # Force multicast to use this interface for sending
     try:
-        gc_sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_IF, socket.inet_aton(iface_ip))
-        vision_sock.setsockopt(socket.IPPROTO_IP, socket.IP_MULTICAST_IF, socket.inet_aton(iface_ip))
+        gc_sock.setsockopt(
+            socket.IPPROTO_IP, socket.IP_MULTICAST_IF, socket.inet_aton(iface_ip)
+        )
+        vision_sock.setsockopt(
+            socket.IPPROTO_IP, socket.IP_MULTICAST_IF, socket.inet_aton(iface_ip)
+        )
     except Exception as e:
         print(f"[WARN] Cannot set IP_MULTICAST_IF to {iface_ip}: {e}")
 
     frame = 0
     try:
-        print("✅ Fake SSL Simulator started. Sending GC ->", GC_ADDR, "and Vision ->", VISION_ADDR)
+        print(
+            "✅ Fake SSL Simulator started. Sending GC ->",
+            GC_ADDR,
+            "and Vision ->",
+            VISION_ADDR,
+        )
         while True:
             state = STATE_CYCLE[frame % len(STATE_CYCLE)]
 
@@ -181,6 +201,7 @@ def main():
             vision_sock.close()
         except Exception:
             pass
+
 
 if __name__ == "__main__":
     main()

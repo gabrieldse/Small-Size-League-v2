@@ -8,20 +8,20 @@
 
 class Communication {
 public:
-    explicit Communication(const NetworkConfig& config);
-    void begin(); 
-    bool receivePacket(MessagePacket& packet);
-    IPAddress getRemoteIP();
-    int getRemotePort();
+  explicit Communication(const NetworkConfig &config);
+  void begin();
+  bool receivePacket(MessagePacket &packet);
+  IPAddress getRemoteIP();
+  int getRemotePort();
 
 private:
-    const char* _ssid;
-    const char* _password;
-    int _port;
-    WiFiUDP Udp;
-    IPAddress _remoteIP;
-    int _remotePort;
-    bool receivePacket(uint8_t* buffer, size_t size);
+  const char *_ssid;
+  const char *_password;
+  int _port;
+  WiFiUDP Udp;
+  IPAddress _remoteIP;
+  int _remotePort;
+  bool receivePacket(uint8_t *buffer, size_t size);
 };
 
 #endif
