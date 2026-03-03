@@ -18,8 +18,8 @@ import sys
 from typing import Tuple
 
 # Ajuste de import se necessário (assume que PYTHONPATH já aponta para vision/protobuf_messages)
-from controle.vision.protobuf_messages import ssl_gc_referee_message_pb2 as gc
-from controle.vision.protobuf_messages import wrapper_pb2 as wr
+from control.vision.protobuf_messages import ssl_gc_referee_message_pb2 as gc
+from control.vision.protobuf_messages import wrapper_pb2 as wr
 
 # ====== CONFIG ======
 GC_ADDR = ("224.5.23.1", 10003)
