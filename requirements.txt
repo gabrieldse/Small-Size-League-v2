@@ -1,6 +1,11 @@
-protobuf>=3.21
-numpy>=1.23.0
-opencv-python>=4.7.0
-grpcio>=1.66.0
-grpcio-tools>=1.66.0
-pyserial
+cfgv==3.5.0
+distlib==0.4.0
+filelock==3.24.3
+identify==2.6.16
+nodeenv==1.10.0
+platformdirs==4.9.2
+pre_commit==4.5.1
+protobuf==6.33.5
+python-discovery==1.1.0
+PyYAML==6.0.3
+virtualenv==21.0.0
