@@ -1,22 +1,22 @@
-# SSL-EL
+# Titans - Small Size League (SSL) - EL
 
-source venv/bin/activate
+Welcome to the Titans Small Size League (SSL) project repository! This codebase provides everything our robots need to play soccer. Our goal is to compete in CBR 2026.
 
-git checkout -b feature/[nome-da-funcionalidade]
+## 📚 Documentation & Onboarding
 
-git add .
-git commit -m "feat: descrição clara do que foi feito"
+For new members and detailed setup instructions, please start by reading our documentation online:
+👉 **[SSL Onboarding & Documentation](https://gabrieldse.github.io/Small-Size-League-v2/)**
 
-git push -u origin feature/[nome-da-funcionalidade]
+---
 
+## 🚀 Quick Setup
 
-
-Type,Use Case,Example
-feat,A new feature for the robot or AI.,feat: add open loop circular dribbling
-fix,"A bug fix (logic, math, or crash).",fix: correct robot orientation wrap-around
-refactor,Code change that neither fixes a bug nor adds a feature.,refactor: simplify vector math in navigation
-style,"Changes that do not affect the meaning of the code (white-space, formatting).",style: run clang-format on vision module
-test,Adding missing tests or correcting existing tests.,test: add unit tests for geometry utils
-docs,Documentation only changes.,docs: update onboarding guide for new members
-chore,"Updating build tasks, package manager configs, etc.",chore: add pre-commit hooks to repo
-perf,A code change that improves performance.,perf: optimize collision detection loop
+Run the following commands to build and test the environment:
+```sh
+git clone git@github.com:gabrieldse/Small-Size-League-v2.git
+cd Small-Size-League-v2
+docker build .
+docker compose run --rm --name my_ssl dev
+xhost +local:docker
+grSim # as a graphical test
+```
