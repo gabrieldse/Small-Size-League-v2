@@ -1,4 +1,4 @@
-# Day 1
+# Day 1 - Setup
 
 ## 1. Install Docker
 
@@ -55,6 +55,11 @@ source ~/.bashrc
 
 Build the container image with the simulator (grSim), Python code, C++ embedded tools, and Rust documentation tools. This might take a few minutes as it builds the environment from scratch, layer by layer (defined in the `Dockerfile`). Subsequent builds will be much faster.
 
+
+```sh
+docker build .
+```
+
 ## 4. Run the Environment
 
 The command to start the container is:
@@ -91,5 +96,6 @@ grSim
 
 You should see this screen:
 ![alt text](./../../images/grSim.png)
+⚠️ (If you don't see it, try running `xhost +local:docker` in your host terminal first.)
 
-Bravo! The setup is done. We will soon start creating our own strategy! You can now go to the [day 2](./day2.md)!
+Bravo! The setup is done. We will soon start creating our own strategies! You can now proceed to [Day 2](./day2.md).

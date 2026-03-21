@@ -22,107 +22,76 @@ But first, let's understand how the current project works in theory.
 
 ### Understanding the Project
 
-It is recommended that as you read this tutorial, you explore the different files of the project yourself. You can see that the repository is divided into the following folders:
+It is recommended that as you read this tutorial, you explore the different files of the project yourself. Our repository is generally divided into a few key areas:
 
 ```text
-        ├── crates
-        ├── target
-        └── docs
-                └── src
+├── control/        # Main code for robot control, vision, and strategy
+├── docs/           # You are here! Source files for the mdBook documentation
+├── firmware/       # Embedded systems code for the physical robots
+├── simu/      # (TODO) Simulator environment and integration components
+└── logs/           # Real-time application execution logs
 ```
 
-- `crates` is the folder that contains the control code for each of the libraries used to control our robots.
-- `target` is the build folder. It is generated when you use the command:
+- `control`: The core path planning, geometry utilities, and behavior tree execution.
+- `simu`: The integration code bridging the simulator environment to our main strategy loop.
+- `docs`: The source code for these Onboarding pages.
 
-```bash
-cargo build
-```
-
-- `docs` is this folder, more specifically `docs/src`, where the documentation is written in `.md` files. For example, this tutorial you are reading is located at:
-
-```bash
-/new_archi_ssl/docs/src/onboarding/onboarding.md
-```
+*(todo) Expand detailed explanation of the current folder usage and structural dependencies...*
 
 ---
 
 ### Pipeline
 
-![Pipeline Diagram](../images/pipeline.png)
-
 Imagine your robot is a real soccer player. For it to work, its "brain" (the code) needs to process information in a logical order, like an assembly line.
 
-Here is a summary of this pipeline in simple terms, following the order of the crates.
+![Pipeline Diagram](../images/pipeline.png)
 
-#### The Pipeline: From Eye to Kick
-
-In the file `crates/app/src/main.rs`, the `fn main()` works as the "Heart" that sets the pace of the game. It runs these functions in an infinite loop:
-
-```rust
-fn main() {
-    loop {
-        let raw_data = vision::get_data();    // I see
-        let map = world::update(raw_data);    // I understand where I am
-        let decisions = strategy::plan(map);  // I decide what to do
-        control::execute(decisions);          // I move!
-    }
-}
-```
-
-And these are the current crates:
-
-```text
-    ├── crates
-    │   ├── app
-    │   ├── control
-    │   ├── shared_types
-    │   ├── simu
-    │   ├── strategy
-    │   ├── vision
-    │   └── world
-```
+*(todo) Provide a detailed code snippet and pipeline loop explanation specific to our newly adopted integration structure...*
 
 #### Vision (The Eyes)
+The robot receives images from up to 4 different cameras on the ceiling of the field. The vision system processes this computer program data and generates the raw positions of the ball and players (SSL vision). Our job is to mix and match the data from the different cameras, parse (they might not always be in order). And pass it to the next stage.
 
-The robot receives images from the cameras on the ceiling of the field. The vision crate processes this information, coming from a computer program, and generates the positions of the ball and players.
+#### State (The Mental Map)
+The system takes this noisy data and filters our view into an established "ground truth" to get the most accurate position of the ball and players It structurally maps out what is happening on the field right now.
 
-Summary:
-```text
-+------------------------+          +-------------+        +---------------------+
-|  Camera/ready software |  ---->   |   Vision    | ---->  |   Raw positions     |
-+------------------------+          +-------------+        +---------------------+
-```
-
-#### World (The Mental Map)
-
-The world crate takes this noisy data and generates a struct that contains our filtered view of our "ground truth." It creates the "map" of what is happening now.
 
 #### Strategy (The Coach)
+This is where the high-level intelligence—implemented using [Behavior Trees](https://en.wikipedia.org/wiki/Behavior_tree_(artificial_intelligence,_robotics_and_control))—decides *what* the robot should do.
+For example: if the ball is close, the robot should approach and kick; if defending, it should block a passing lane.
 
-This is where the intelligence decides what to do. "Is the ball close? Yes. Then, Robot 1, go to it and kick." It sets the objective.
+The output of this layer is a **desired objective**, such as a target position, velocity, or action.
 
-#### Control (The Muscles)
+#### Control (The Brain)
+This layer is responsible for translating high-level objectives into precise, physically feasible motion.
 
-The coach decided to kick, but the robot needs to know how to turn the wheels to get there. The control calculates the exact force for each motor so the robot moves smoothly.
+Given a target (e.g., position or velocity), the control system computes how the robot should move over time to achieve it. This includes:
 
-### Support Pieces
+- **Trajectory tracking:** Converting targets into smooth motion
+- **Feedback control (e.g., PID):** Continuously correcting errors between desired and actual state
+- **Kinematics & dynamics:** Mapping global motion (x, y, rotation) into wheel velocities
+- **Constraints handling:** Respecting limits like maximum speed, acceleration, and motor capabilities
 
-#### Simu (The Videogame)
+The control layer does *not decide what to do*—it ensures that what was decided is executed as accurately and robustly as possible.
 
-It is a simulator. Instead of turning on a real metal robot, you run the code here to test if it won't do something silly on the virtual field.
+#### Firmware (The Muscles)
+This layer runs on the robot and directly interfaces with the hardware.
 
-#### Shared_Types (The Dictionary)
+It receives low-level commands (e.g., wheel velocities) and is responsible for:
 
-This is where the definitions that everyone uses are. For vision and strategy to speak the same language (e.g., what is a "Point" or a "Robot"), they consult this crate.
+- Driving motors using PWM signals
+- Reading sensors (encoders, IMU, etc.)
+- Applying very fast local control loops when necessary (e.g., motor-level PID)
 
-#### App (The Conductor)
-
-It is the one that starts everything and ensures that the information goes from vision to the motors in the correct order.
-
-Does this analogy of "Eyes -> Map -> Coach -> Muscles" make sense? If you want, you can detail what happens inside one of these specific crates.
+In short, while the control layer computes *how the robot should move*, the firmware ensures that the motors actually follow those commands in the real world.
 
 ---
 
 ### Coach vs Play vs Skills
 
-*(This section will be covered in later documentation)*
+*(todo) This section will be covered in later documentation explicitly detailing the strategy modules.*
+
+---
+
+You are ready to start the practice section. Click here to continue:
+
+[2. Practice - Day1 Setup](./practice/day1.md)

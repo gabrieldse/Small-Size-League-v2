@@ -8,15 +8,14 @@ What you will be able to do at the end of this tutorial:
 
 The onboarding is organized to be completed in 5 days, with daily blocks of 1h30.
 
-- Day 1: Read the theoretical part & setup (install, compile, serve docs)
-- Day 2: Understand the basics of Rust (rustlings)
+- Day 1: Understand how the project works (theory) & setup (install, compile, serve docs)
+- Day 2: Understand the basics of the programing language
 - Day 3: Understand, run, and modify the current strategy.
 - Day 4: Learn how to develop. Create your branch, commits.
-- Day 5: Develop your current strategy and test it.
+- Day 5: Develop your OWN strategy and test it.
 
 Click here to start the first part:
 
 [1. Theory](./theory.md)
 
 [2. Practice](./practice.md)
-alskçdjlaksdfçkasdf

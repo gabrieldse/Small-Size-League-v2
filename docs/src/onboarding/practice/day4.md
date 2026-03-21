@@ -2,6 +2,8 @@
 
 Today you will learn how to contribute to the project by creating branches and making commits according to our standards.
 
+*(todo - add actual commands to follow along)*
+
 ## Contribution Workflow
 
 1. **Create a branch**:
@@ -22,3 +24,7 @@ Today you will learn how to contribute to the project by creating branches and m
    ```sh
    git push origin feature/your-feature-name
    ```
+
+   A pull request should not modify too many files or add too many features at once. For this initial learning phase, your pull request should not exceed 300 lines of code.
+
+You can now proceed to [Day 5](./day5.md).
